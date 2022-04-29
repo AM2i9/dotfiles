@@ -1,0 +1,4 @@
+#/bin/sh
+
+# shortcut to grep a directory
+ls -la | grep "$1"

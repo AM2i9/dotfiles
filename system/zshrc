@@ -13,3 +13,4 @@ source $ZSH/oh-my-zsh.sh
 alias _="sudo"
 alias la="ll -al"
 alias rmf="rm -rf"
+alias cls="clear"

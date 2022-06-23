@@ -4,7 +4,7 @@ dir=~/dotfiles
 for file in $(ls $dir/system | grep -v /); do
     if [[ "$file" != "install.sh" ]]; then
     echo "Creating symlink to $file in home directory."
-    ln -s $dir/system/$file ~/.$file
+    ln -sf $dir/system/$file ~/.$file
     fi
 done
 
@@ -35,3 +35,20 @@ install_zsh () {
 }
 
 install_zsh
+
+echo "Using i3 (gaps)? [N\y]"
+read usingithree
+
+if [[ ${usingithree^^} == 'Y' ]]; then
+    echo "Linking i3, picom, and rofi configs..."
+    ln -sf $dir/i3 ~/.config
+    ln -sf $dir/picom ~/.config
+    ln -sf $dir/rofi ~/.config
+
+    echo "Installing bumblebee-status..."
+    python -m pip install bumblebee-status=="2.1.5"
+
+    echo "Installing betterlockscreen..."
+    wget https://git.io/JZyxV -O - -q | bash -- system latest true
+fi
+

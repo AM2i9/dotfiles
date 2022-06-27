@@ -44,6 +44,16 @@ if [[ ${usingithree^^} == 'Y' ]]; then
     ln -sf $dir/i3 ~/.config
     ln -sf $dir/picom ~/.config
     ln -sf $dir/rofi ~/.config
+    ln -sf $dir/dunst ~/.config
+    ln -sf $dir/betterlockscreenrc ~/.config
+    
+    echo "Installing dunst and rofi"
+    if [[ -f /etc/arch-release ]]; then
+        sudo pacman -S dunst rofi picom
+    fi
+    if [[ -f /etc/debian_version ]]; then
+	sudo apt-get install dunst rofi picom
+    fi
 
     echo "Installing bumblebee-status..."
     python -m pip install bumblebee-status=="2.1.5"
@@ -52,3 +62,4 @@ if [[ ${usingithree^^} == 'Y' ]]; then
     wget https://git.io/JZyxV -O - -q | bash -- system latest true
 fi
 
+echo "Configuration complete"

@@ -205,3 +205,5 @@ bindsym $mod+shift+x exec betterlockscreen -l --display 1 --span
 
 # i3-gaps
 gaps inner 10
+
+focus_follows_mouse no

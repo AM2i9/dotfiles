@@ -46,6 +46,7 @@ if [[ ${usingithree^^} == 'Y' ]]; then
     ln -sf $dir/rofi ~/.config
     ln -sf $dir/dunst ~/.config
     ln -sf $dir/betterlockscreenrc ~/.config
+    ln -sf $dir/kitty ~/.config
     
     echo "Installing dunst and rofi"
     if [[ -f /etc/arch-release ]]; then

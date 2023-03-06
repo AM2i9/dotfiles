@@ -10,7 +10,7 @@ with open(os.path.expanduser("~/.eval_history"), "r+") as fhistory:
     history = fhistory.readlines()[:10]
     print(history)
     while True:
-        history_str = ''.join(history)
+        history_str = ''.join(history[::-1])
         eval_input = os.popen(f"echo -e \"{eval_result}\n{history_str}\" | dmenu -p \"eval\"").read()
         
         if eval_input.strip() == "":
@@ -22,4 +22,4 @@ with open(os.path.expanduser("~/.eval_history"), "r+") as fhistory:
             eval_result = f"{e}"
 
         fhistory.write(eval_input)
-        history.insert(0, eval_input)
+        history.append(eval_input)

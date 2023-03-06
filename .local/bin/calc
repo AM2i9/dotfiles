@@ -1,0 +1,25 @@
+#!/bin/python3
+
+import os
+from pathlib import Path
+
+eval_result = ""
+history = []
+
+with open(os.path.expanduser("~/.eval_history"), "r+") as fhistory:
+    history = fhistory.readlines()[:10]
+    print(history)
+    while True:
+        history_str = ''.join(history)
+        eval_input = os.popen(f"echo -e \"{eval_result}\n{history_str}\" | dmenu -p \"eval\"").read()
+        
+        if eval_input.strip() == "":
+            break
+
+        try:
+            eval_result = eval(eval_input)
+        except Exception as e:
+            eval_result = f"{e}"
+
+        fhistory.write(eval_input)
+        history.insert(0, eval_input)

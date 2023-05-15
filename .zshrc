@@ -107,3 +107,9 @@ alias cls="clear"
 alias mkdirs="mkdir -p"
 
 
+
+eval $(thefuck --alias)
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

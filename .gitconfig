@@ -1,0 +1,14 @@
+[core]
+	editor = vim
+[user]
+	name = Patrick Brennan
+	email = brennanpatrick20@gmail.com
+[include]
+	path = ".gitconfig.local"
+
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

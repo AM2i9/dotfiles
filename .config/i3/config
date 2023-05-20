@@ -114,16 +114,16 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "gen"
-set $ws2 "web"
-set $ws3 "code"
-set $ws4 "vm"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "media"
-set $ws10 "com"
+set $ws1 "1:gen"
+set $ws2 "2:web"
+set $ws3 "3:code"
+set $ws4 "4:vm"
+set $ws5 "5:5"
+set $ws6 "6:6"
+set $ws7 "7:7"
+set $ws8 "8:8"
+set $ws9 "9:media"
+set $ws10 "10:com"
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -199,8 +199,6 @@ for_window [class=".*"] border pixel 0
 
 for_window [class="kitty"] floating enable
 
-floating_maximum_size 1280 x 720
-
 bindsym $mod+shift+f exec firefox
 bindsym $mod+shift+g exec obsidian
 bindsym $mod+c exec calc
@@ -220,5 +218,6 @@ focus_follows_mouse no
 
 exec --no-startup-id nitrogen --restore &
 
-exec --no-startup-id polybar
+# exec --no-startup-id polybar
+exec --no-startup-id eww open bar
 exec --no-startup-id picom

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+IFS=$'\n' dev=($(nmcli d | grep -E "ethernet |wifi "))
+
+out='['
+
+for device in ${dev[@]}; do
+    IFS=$' ' this_dev=(${device})
+    interface=${this_dev[0]}
+    network=${this_dev[@]:3}
+    ip=$(nmcli d show $interface | grep "IP4.ADDRESS\[1\]" | awk '{print ($2)}')
+    out=$(echo $out\{\"i\":\"$interface\",\"n\":\"$network\",\"a\":\"$ip\"\},)
+done
+
+echo ${out%,}]
+
+

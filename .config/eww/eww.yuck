@@ -90,7 +90,7 @@
 )
 
 (defwidget workspace_module []
-    (literal :class "workspaces" :content "${workspaces}")
+    (literal :class "workspaces pill" :content "${workspaces}")
 )
 
 (defwidget network []
@@ -98,7 +98,7 @@
         :tooltip "Open nmtui"
         :onclick "i3-sensible-terminal -- nmtui &"
         (box 
-            :class "network pill"
+            :class "network pill pillhover"
             :space-evenly false
             (for net in NETWORK
                 (box
@@ -182,7 +182,7 @@
 (defwidget system []
     (box
         :orientation "h"
-        :class "system pill"
+        :class "system pill pillhover"
         (cpu)
         (mem)
     )

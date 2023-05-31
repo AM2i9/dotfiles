@@ -43,19 +43,29 @@
 }
 
 .workspace {
-    padding: 1 15 1 15;
-    background: $background-solid;
-    border-radius: 0 0 10 10;
+    padding: 0 15 0 13;
+    color: rgb(86, 86, 86);
+    padding-top: 2px;
+    padding-bottom: 2px;
+    // background: rgb(64, 64, 64);
+}
+
+.workspace.open {
+    color: #c3c3c3;
+}
+
+.workspace:hover {
+    background-color: $background;
 }
 
 .workspace.focused {
-    background: rgb(64, 64, 64);
     font-weight: bolder;
-    padding: 5 25 5 25;
+    color: white;
+    background-color: $background-solid;
 }
 
 .workspace.visible {
-    background: rgb(45, 45, 45)
+    color: white;
 }
 
 .i3state {
@@ -64,7 +74,9 @@
 
 .player-bar {
     background-color: rgba(#555, 0.7);
-    margin: 5 0 5 0;
+    margin: 3 -3 3 -3;
+    // this margin doesn't make sense
+    // but it works
 }
 
 .player.spotify {
@@ -72,7 +84,7 @@
 }
 
 .player.spotify .player-bar {
-    background-color: #2a924f;
+    background-color: #1f6e3b;
 }
 
 .player.vlc {
@@ -98,4 +110,8 @@
     min-height: 6px;
     min-width: 50px;
     margin-left: 10px;
+}
+
+.control-center {
+    background-color: $background;
 }

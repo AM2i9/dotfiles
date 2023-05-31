@@ -17,27 +17,33 @@ except ImportError:
 
 i3 = Connection()
 
+workspaces = ["", "", "󰨞", "", "", "", "", "", "", "󰙯"]
+
 def on_workspace(wm: Connection, e):
 
-    workspaces = wm.get_workspaces()
+    open_workspaces = {wrk.num: wrk for wrk in wm.get_workspaces()}
 
     widgets = ""
 
-    workspaces.sort(key = lambda x: int(x.name.split(":")[0]))
-
-    for workspace in workspaces:
+    for i, workspace in enumerate(workspaces):
         classes = ["workspace"]
-        if workspace.focused:
-            classes.append("focused")
-        elif workspace.visible:
-            classes.append("visible")
-        elif workspace.urgent:
-            classes.append("urgent")
 
-        name = workspace.name.split(":")[1]
-        widgets += f""" (button :onclick "i3-msg workspace {workspace.name}" :class "{' '.join(classes)}" (label :text "{name}"))"""
+        if (wrk := open_workspaces.get(i+1)):
+            
+            classes.append("open")
+
+            if wrk.focused:
+                classes.append("focused")
+            elif wrk.visible:
+                classes.append("visible")
+            elif wrk.urgent:
+                classes.append("urgent")
+            
+
+        widgets += f""" (button :onclick "i3-msg workspace {i+1}" :class "{' '.join(classes)}" (label :text "{workspace}"))"""
     
-    print(f"""(box :orientation "h" :space-evenly false :spacing 10 {widgets})""", flush=True)
+
+    print(f"""(box :orientation "h" :space-evenly false :spacing 1 {widgets})""", flush=True)
 
 def on_mode(wm: Connection, e: ModeEvent):
     print(e.change, flush=True)

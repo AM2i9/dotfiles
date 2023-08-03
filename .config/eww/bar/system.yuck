@@ -1,0 +1,151 @@
+(include "bar/network.yuck")
+
+(defpoll CLOCK :interval "1m" "date '+%_I:%M %p'")
+(defpoll DATE :interval "1h" "date '+\%a, \%b \%d '")
+(defpoll MEMORY :interval "5s" "scripts/memory")
+(defpoll CPU :interval "5s" "scripts/cpu")
+(defpoll HOSTNAME :interval "5h" "hostname")
+
+(deflisten BATTERY "bartender batwatcher")
+
+(defwidget hostname []
+    (box
+        :class "hostname pill"
+        (label
+            :text {"󰍹" + " " + HOSTNAME}
+        )
+    )
+)
+
+(defwidget mem []
+    (button
+        :tooltip {MEMORY + "%"}
+        :onclick "i3-sensible-terminal -- htop &"
+        (box
+            :vexpand "false"
+            :hexpand "false" 
+            :class "mem"
+            :space-evenly false
+            (revealer
+                :transition "slideleft"
+                :reveal {revealsystemlabels == "true"}
+                "MEM "
+            )
+            (circular-progress
+                :class "membar"
+                :value MEMORY
+                :start-at 25
+                :thickness 4
+                :clockwise true
+                (button
+                    :class "memicon"
+                    ""
+                )
+            )
+        )
+    )
+)
+
+(defwidget cpu []
+    (button
+        :tooltip {CPU + "%"}
+        :onclick "i3-sensible-terminal -- htop &"
+        (box
+            :vexpand "false"
+            :hexpand "false" 
+            :class "mem"
+            :space-evenly false
+            (revealer
+                :transition "slideleft"
+                :reveal {revealsystemlabels == "true"}
+                "CPU "
+            )
+            (circular-progress
+                :class "cpubar"
+                :value CPU
+                :start-at 25
+                :thickness 4
+                :clockwise true
+                (button
+                    :class "cpuicon"
+                    ""
+                )
+            )
+        )
+    )
+)
+
+(defwidget battery []
+    (box
+        :vexpand "false"
+        :hexpand "false"
+	:class "battery"
+	:space-evenly false
+	:tooltip {BATTERY.state + " " + round(BATTERY.charge, 0) + "%"}
+    (revealer
+        :transition "slideleft"
+        :reveal {revealsystemlabels == "true"}
+        "BAT "
+    )
+	(circular-progress
+		:class {"batbar"+ " " + BATTERY.state}
+		:value {BATTERY.charge}
+		:start-at 25
+		:thickness 4
+		:clockwise true
+		(button
+			:class "cpuicon"
+			""
+		)
+	)
+   )
+)
+
+(defvar revealsystemlabels "false")
+
+(defwidget system []
+    (eventbox
+        :onhover "eww u revealsystemlabels=\"true\""
+        :onhoverlost "eww u revealsystemlabels=\"false\""
+        (box
+            :orientation "h"
+            :class "system pill"
+            :space-evenly false
+            (cpu)
+            (mem)
+            (battery)
+        )
+    )
+)
+
+; (defwidget network []
+;     (eventbox
+;         :tooltip "Open nmtui"
+;         :onclick "i3-sensible-terminal -- nmtui &"
+;         (box
+;             :space-evenly true
+;             (for net in NETWORK
+;                 (box
+;                     :space-evenly false
+;                     :tooltip {net.name + " " + net.state + " - " + net.conn + " - " + net.ip}
+;                     :class "network pill"
+;                     (label
+;                         :class "network-icon"
+;                         :text {net.disp_icon}
+;                     )
+;                 )
+;             )
+;         )
+;     )
+; )
+
+(defwidget clock_module []
+    (box
+        :class "clock pill"
+        :space-evenly false
+        " "
+        DATE
+        "| "
+        CLOCK
+    )
+)

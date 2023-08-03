@@ -1,0 +1,33 @@
+(deflisten NETWORK "bartender nmwatcher")
+
+(defvar network-icons "{
+    \"WirelessConnected\": \"\",
+    \"WirelessConnecting\": \"󱛆\",
+    \"WirelessDisconnected\": \"\",
+    \"WirelessUnavailable\": \"󰀝\",
+    \"WiredConnected\": \"󰈀\",
+    \"WiredConnecting\": \"󰇘\",
+    \"WiredDisconnected\": \"󰲜\",
+    \"WiredUnavailable\": \"󰲜\"
+}")
+
+(defwidget network []
+    (eventbox
+        :tooltip "Open nmtui"
+        :onclick "i3-sensible-terminal -- nmtui &"
+        (box
+            :space-evenly true
+            (for net in NETWORK
+                (box
+                    :space-evenly false
+                    :tooltip {net.name + " " + net.state + " - " + (net.connection_name?:"-") + " - " + (net.ip?.[0]?:"No IP")}
+                    :class "network pill"
+                    (label
+                        :class "network-icon"
+                        :text {network-icons[net.conn_type + net.state]}
+                    )
+                )
+            )
+        )
+    )
+)

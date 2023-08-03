@@ -1,0 +1,59 @@
+(include "bar/system.yuck")
+(include "bar/audio.yuck")
+(include "bar/i3.yuck")
+
+(defwidget center []
+    (box
+        :orientation "h"
+        :halign "center"
+        :class "center"
+        :space-evenly false
+        (workspace_module)
+        )
+)
+
+(defwidget left []
+    (box
+        :orientation "h"
+        :halign "start"
+        :class "left"
+        :space-evenly false
+        (hostname)
+        (i3state)
+        (player)
+        (volume)
+        )
+)
+
+(defwidget right []
+    (box
+        :orientation "h"
+        :halign "end"
+        :class "right"
+        :space-evenly false
+        (network)
+        (system)
+        (clock_module))
+)
+
+(defwidget layout []
+    (centerbox
+        :orientation "h"
+        :class "layout"
+        (left)
+        (center)
+        (right))
+)
+
+(defwindow bar
+    :geometry (geometry :x "0%"
+                 :y "0px"
+                 :width "100%"
+                 :height "1px"
+                 :anchor "top center")
+    :exclusive true
+    :stacking "fg"
+    :windowtype "dock"
+    :class "bar_class"
+    (layout)
+)

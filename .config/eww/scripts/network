@@ -1,17 +1,114 @@
-#!/bin/bash
+#!/bin/xonsh
+import json
+import time
 
-IFS=$'\n' dev=($(nmcli d | grep -E "ethernet |wifi "))
+ICONS={
+    "wl": "",
+    "en": "󰈀",
+    "wl-disconnected": "",
+    "wl-unavailable": "󰀝",
+    "wl-connecting": "󱛆",
+    "en-unavailable": "󰲜",
+    "en-connecting": "󰇘",
+    "wl-strength": ["󰤟", "󰤢", "󰤥", "󰤨"]
+}
 
-out='['
+def get_icon(interface):
+    if interface['state'] == 'connected':
+        if type == "wifi":
+            strength = int($(nmcli -f IN-USE,SIGNAL device wifi | grep "*").split()[-1])
+            return ICONS['wifi-strength'][strength//25]
+        else:
+            return ICONS[interface['type']]
+    else:
+        return ICONS.get(f"{interface['type']}-{interface['state']}", "")
 
-for device in ${dev[@]}; do
-    IFS=$' ' this_dev=(${device})
-    interface=${this_dev[0]}
-    network=${this_dev[@]:3}
-    ip=$(nmcli d show $interface | grep "IP4.ADDRESS\[1\]" | awk '{print ($2)}')
-    out=$(echo $out\{\"i\":\"$interface\",\"n\":\"$network\",\"a\":\"$ip\"\},)
-done
+def get_dev_ip(name):
+    ip = $(nmcli d show @(name) | grep "IP4.ADDRESS\[1\]").split()
+    if ip:
+        return ip[-1]
+    else:
+        return ""
 
-echo ${out%,}]
+def display(interfaces):
+    print(json.dumps(list(interfaces.values())), flush=True)
+
+job = !(nmcli monitor &)
+
+nm = $(nmcli d | grep -E "ethernet |wifi ").strip().split('\n')
+
+interfaces = {}
+
+for interface in nm:
+    name, _, state, *conn = interface.split()
+
+    if conn is not str:
+        conn = ' '.join(conn)
+
+    ip = get_dev_ip(name)
+    interfaces[name] = {
+        "name": name,
+        "state": state,
+        "type": name[:2],
+        "conn": conn,
+        "ip": ip,
+    }
+    interfaces[name]["disp_icon"] = get_icon(interfaces[name])
+
+display(interfaces)
+
+# this is stupid but it'll work to keep updates just as fast
+# but using less CPU
+
+while True:
+    for event in job.stdout:
+        event = event.decode()
+        if event.startswith('wl') or event.startswith('en'):
+            interface = event.split(":")
+            type = interface[0][:2]
+            name = interface[0]
+            state = interface[1].strip()
+
+            if state == "device removed":
+                interfaces.pop(name)
+                display(interfaces)
+                continue
+            
+            if name not in interfaces:
+                interfaces[name] = {
+                    "name": name,
+                    "state": "",
+                    "type": "",
+                    "conn": "",
+                    "ip": ""
+                }
+            
+            interfaces[name]["type"] = type
 
 
+            # uhhhhh yeah just don't mind this
+            if state.startswith("using connection"):
+
+                interfaces[name]["conn"] = state.split("'")[-2]
+                interfaces[name]["state"] = "connecting"
+                interfaces[name]["disp_icon"] = get_icon(interfaces[name])
+
+            elif state == "connected":
+
+                interfaces[name]["ip"] = get_dev_ip(name)
+                interfaces[name]["state"] = "connected"
+                interfaces[name]["disp_icon"] = get_icon(interfaces[name])
+
+            elif state in ("unavailable", "disconnected"):
+
+                interfaces[name]["ip"] = ""
+                interfaces[name]["conn"] = ""
+                interfaces[name]["state"] = state
+                interfaces[name]["disp_icon"] = get_icon(interfaces[name])
+
+            else:
+                continue
+
+            display(interfaces)
+        
+    time.sleep(0.3)

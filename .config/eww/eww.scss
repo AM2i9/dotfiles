@@ -4,7 +4,7 @@
     all: unset;
     font-family: feather;
     font-family: Hack Nerd Font;
-    font-size: 10px;
+    font-size: 16px;
 }
 
 .pill {
@@ -29,29 +29,43 @@
     background-color: #111;
 }
 
+.batbar {
+    color: $lightblue;
+    background-color: #111;
+}
+
+.batbar.Charging {
+    color: $lightgreen;
+}
+
+.batbar.battery-low {
+    background-color: $red;
+}
+
 .memicon, .cpuicon {
     margin: 1px 10px 1px 10px;
     font-size: 8px;
 }
 
 .network > * {
-    padding: 1 4 1 4;
+    padding: 1 10 1 4;
 }
 
 .network-interface {
     color: $lightmagenta;
+    padding-right: 6px;
 }
 
 .workspace {
     padding: 0 15 0 13;
-    color: rgb(86, 86, 86);
+    color: rgb(119, 119, 119);
     padding-top: 2px;
     padding-bottom: 2px;
     // background: rgb(64, 64, 64);
 }
 
 .workspace.open {
-    color: #c3c3c3;
+    color: #d7d7d7;
 }
 
 .workspace:hover {
@@ -74,9 +88,13 @@
 
 .player-bar {
     background-color: rgba(#555, 0.7);
-    margin: 3 -3 3 -3;
+    // margin: 1 -1 1 -1;
     // this margin doesn't make sense
     // but it works
+}
+
+.player-icon {
+    padding-left: 5px;
 }
 
 .player.spotify {

@@ -1,0 +1,77 @@
+(defpoll VOLUME :interval "1s" "scripts/getvol")
+
+(deflisten AUDIO "bartender pulsewatcher")
+(deflisten PLAYER "scripts/music.py")
+
+(defwidget player []
+    (box
+        :class {'player pill ' + PLAYER.player}
+        :space-evenly false
+        :orientation "h"
+        (label
+            :class "player-icon"
+            :text {PLAYER.icon}
+            :limit-width 2
+            :show-truncated false
+            :wrap false
+        )
+        (revealer
+            :transition "slideright"
+            :reveal {PLAYER.status != "none"}
+            (box
+                :space-evenly false
+                (label
+                    :text {PLAYER.text}
+                    :limit-width 20
+                    :truncate_left false
+                    :show-truncated true
+                    :wrap false
+                )
+                "‎ "
+                (circular-progress
+                    :class "player-bar"
+                    :valign "center"
+                    :thickness 8
+                    :start-at 75
+                    :visible {PLAYER.position > 0}
+                    :value {PLAYER.position}
+                    :orientation: "h"
+                )
+            )
+        )
+        "‎ | "
+        (button
+            :active {PLAYER.status != "none"}
+            :class "player-button"
+            :onclick "playerctl play-pause"
+            {
+                PLAYER.status == "none" ? " "
+                : (PLAYER.status == "Playing" ? " " : " ")
+            }
+        )
+    )
+)
+
+(defwidget volume []
+    (eventbox
+        :tooltip "Middle click to open pavucontrol"
+        :onmiddleclick "pavucontrol &"
+        (box
+            :class "volume pill pill-interactive"
+            :space-evenly false
+            {AUDIO.device_desc == "Headphones" ? 
+                (AUDIO.muted ? "󰟎" : "󰋋")
+                :(AUDIO.muted ? "󰖁" : "󰕾")
+            }
+            (scale
+                :class "volume-bar"
+                :min 0
+                :max 101
+                :value {AUDIO.volume_percent}
+                :orientation "h"
+                :valign "center"
+                :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%"
+            )
+        )
+    )
+)

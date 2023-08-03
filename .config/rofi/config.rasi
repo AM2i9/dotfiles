@@ -177,3 +177,4 @@ textbox {
     horizontal-align:            0.0;
     highlight:                   none;
 }
+@theme "/home/am2i9/.local/share/rofi/themes/spotlight-dark.rasi"

@@ -1,0 +1,17 @@
+(deflisten workspaces "scripts/i3.py workspaces")
+(deflisten i3mode "scripts/i3.py mode")
+
+(defwidget i3state []
+    (
+        box
+        :class "i3state pill"
+        :visible {i3mode != "default"}
+        (label
+            :text {i3mode}
+        )
+    )
+)
+
+(defwidget workspace_module []
+    (literal :class "workspaces pill" :content "${workspaces}")
+)

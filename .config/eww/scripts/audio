@@ -1,0 +1,22 @@
+#!/bin/xonsh
+import json
+
+dump = json.loads($(pactl --format=json list sinks))
+
+default_name = $(pactl get-default-sink).strip()
+
+dev = {}
+
+for device in dump:
+
+    if device.get('name') == default_name:
+        dev = device
+        break
+
+print(json.dumps(
+    {
+        "headphones": "headphones" in dev.get("active_port", ''),
+        "volume": (dev.get("volume", {}).get("front-left", {}).get("value", 0) * 100 // dev.get("base_volume", {}).get("value", 1)),
+        "muted": dev.get('mute', False)
+    }
+), flush=True)

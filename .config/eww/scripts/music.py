@@ -15,7 +15,7 @@ players = {
     "spotify": "",
     "vlc": "󰕼",
     "firefox": "",
-    "other": "󰋋"
+    "other": ""
 }
 
 
@@ -23,7 +23,7 @@ while True:
 
     if _status == 1:
         _status = 0
-        print(json.dumps({"status":"none", "player":"none", "text":"󰋋 Not Playing", "position":0}), flush=True)
+        print(json.dumps({"status":"none", "player":"none", "icon": "", "text":"Not Playing", "position":0}), flush=True)
 
     running_players = [
         Player(service.split(".")[3], session.get_object(service, "/org/mpris/MediaPlayer2"))
@@ -44,11 +44,12 @@ while True:
                 status = cur_player.obj.Get('org.mpris.MediaPlayer2.Player', 'PlaybackStatus', dbus_interface='org.freedesktop.DBus.Properties')
                 metadata = cur_player.obj.Get('org.mpris.MediaPlayer2.Player', 'Metadata', dbus_interface='org.freedesktop.DBus.Properties')
 
-                text_str = f"{players.get(cur_player.name, '󰋋')} {metadata.get('xesam:title') or metadata.get('xesam:url')} - {', '.join(metadata.get('xesam:artist') or ['None'])}"
+                text_str = f"{metadata.get('xesam:title') or metadata.get('xesam:url')} - {', '.join(metadata.get('xesam:artist') or ['None'])}: <20"
 
                 data = {
                     "status": status,
                     "player": cur_player.name,
+                    "icon": f"{players.get(cur_player.name, '󰋋')} ",
                     "text": text_str,
                     "position": 0.0
                 }
@@ -62,4 +63,6 @@ while True:
                 time.sleep(0.5)
             except dbus.exceptions.DBusException as e:
                 break
+    
+    time.sleep(0.5)
     

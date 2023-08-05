@@ -1,7 +1,7 @@
 (deflisten workspaces "scripts/i3.py workspaces")
 (deflisten i3mode "scripts/i3.py mode")
 
-(deflisten I3 "/home/am2i9/Projects/bartender/target/release/bartender i3watcher")
+(deflisten I3 "bartender i3watcher")
 
 (defwidget i3state []
     (box

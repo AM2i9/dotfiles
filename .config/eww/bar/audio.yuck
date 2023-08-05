@@ -1,27 +1,39 @@
 (defpoll VOLUME :interval "1s" "scripts/getvol")
 
 (deflisten AUDIO "bartender pulsewatcher")
-(deflisten PLAYER "scripts/music.py")
+(deflisten PLAYER "bartender musicwatcher")
+
+(defvar player_classes "{
+    \"Spotify\": \"spotify\",
+    \"Mozilla Firefox\": \"firefox\",
+    \"VLC media player\": \"vlc\"
+}")
+
+(defvar player_icons "{
+    \"Spotify\": \" \",
+    \"VLC media player\": \"󰕼 \",
+    \"Mozilla Firefox\": \" \"
+}")
 
 (defwidget player []
     (box
-        :class {'player pill ' + PLAYER.player}
+        :class {'player pill ' + (player_classes?.[PLAYER.player_name])?:""}
         :space-evenly false
         :orientation "h"
         (label
             :class "player-icon"
-            :text {PLAYER.icon}
+            :text {((player_icons?.[PLAYER.player_name])?:"" + ((PLAYER.status != "null")?" ":""))}
             :limit-width 2
             :show-truncated false
             :wrap false
         )
         (revealer
             :transition "slideright"
-            :reveal {PLAYER.status != "none"}
+            :reveal {PLAYER.status != "null"}
             (box
                 :space-evenly false
                 (label
-                    :text {PLAYER.text}
+                    :text {PLAYER.song_name + " - " + PLAYER.artist}
                     :limit-width 20
                     :truncate_left false
                     :show-truncated true
@@ -33,19 +45,19 @@
                     :valign "center"
                     :thickness 8
                     :start-at 75
-                    :visible {PLAYER.position > 0}
-                    :value {PLAYER.position}
+                    :visible {PLAYER.length != "null"}
+                    :value {((PLAYER.length?:0) > 0 && (PLAYER.position?:0) > 0) ? (round((PLAYER.position / PLAYER.length) * 100, 0)) : 0}
                     :orientation: "h"
                 )
             )
         )
         "‎ | "
         (button
-            :active {PLAYER.status != "none"}
+            :active {PLAYER.status != "null"}
             :class "player-button"
             :onclick "playerctl play-pause"
             {
-                PLAYER.status == "none" ? " "
+                PLAYER.status == "null" ? " "
                 : (PLAYER.status == "Playing" ? " " : " ")
             }
         )

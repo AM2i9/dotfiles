@@ -1,17 +1,44 @@
 (deflisten workspaces "scripts/i3.py workspaces")
 (deflisten i3mode "scripts/i3.py mode")
 
+(deflisten I3 "/home/am2i9/Projects/bartender/target/release/bartender i3watcher")
+
 (defwidget i3state []
-    (
-        box
+    (box
         :class "i3state pill"
-        :visible {i3mode != "default"}
+        :visible {I3.mode != "default"}
         (label
-            :text {i3mode}
+            :text {I3.mode}
         )
     )
 )
 
+(defvar workspace-nums "[\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\"]")
+(defvar workspace-icons "[\"\", \"\", \"󰨞\", \"\", \"\", \"\", \"\", \"\", \"\", \"󰙯\"]")
+
 (defwidget workspace_module []
-    (literal :class "workspaces pill" :content "${workspaces}")
+    (box
+        :class "workspaces pill"
+        :orientation "h"
+        :space-evenly false
+        :spacing 1
+    
+        (for workspace in workspace-nums
+            (button
+                :onclick {'i3-msg workspace' + workspace}
+                :class { "workspace" + (
+                    (I3.workspaces[workspace] == "null") ? "" : " open " + ((
+                        (I3.workspaces[workspace].urgent) ? " urgent" : (
+                            (I3.workspaces[workspace].focused) ? " focused" : (
+                                (I3.workspaces[workspace].visible) ? " visible" : ""
+                            )
+                        )
+                    ))
+                )}
+                (label
+                    :text {workspace-icons[workspace - 1]}
+                )
+            )
+        )
+    )
 )

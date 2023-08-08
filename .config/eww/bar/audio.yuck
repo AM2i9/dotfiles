@@ -46,7 +46,9 @@
                     :thickness 8
                     :start-at 75
                     :visible {PLAYER.length != "null"}
-                    :value {((PLAYER.length?:0) > 0 && (PLAYER.position?:0) > 0) ? (round((PLAYER.position / PLAYER.length) * 100, 0)) : 0}
+                    :value {
+                        (((PLAYER.length?:0) > 0) && ((PLAYER.position?:0) > 0) && ((PLAYER.position?:0) <= (PLAYER.length?:0))) ? (round((PLAYER.position / PLAYER.length) * 100, 0)) : 0
+                        }
                     :orientation: "h"
                 )
             )

@@ -1,0 +1,24 @@
+i3lock \
+-S 0 \
+\
+-c 00000000 \
+-B sigma \
+--clock \
+--indicator \
+--radius 180 \
+\
+--time-color ffffffff \
+--date-color ffffffff \
+\
+--greeter-color ffffffff \
+--greeter-text="I am locked. Go away." \
+\
+--insidever-color=000000CC \
+--insidewrong-color=000000CC \
+--verif-color=ffffffff \
+--wrong-color=ffffffff \
+--verif-text="Verifying..." \
+--wrong-text="Wrong!" \
+\
+--pass-volume \
+--pass-screen

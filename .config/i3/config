@@ -28,7 +28,7 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- betterlockscreen -l
+exec --no-startup-id xss-lock --transfer-sleep-lock -- ~/.local/bin/lock &
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -209,7 +209,7 @@ bindsym $mod+shift+f exec firefox
 bindsym $mod+shift+g exec obsidian
 bindsym $mod+c exec --no-startup-id kitty xonsh
 
-bindsym $mod+shift+x exec betterlockscreen -l
+bindsym $mod+shift+x exec ~/.local/bin/lock
 
 bindsym $mod+shift+s exec flameshot gui
 
@@ -221,6 +221,10 @@ bindsym XF86AudioPrev exec playerctl previous
 # Brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 2
 bindsym XF86MonBrightnessDown exec xbacklight -dec 2
+
+# display scripts
+bindsym $mod+p exec selected=$(ls ~/.screenlayout/|rofi -dmenu) && bash ~/.screenlayout/$selected && nitrogen --restore
+bindsym $mod+shift+p exec arandr &
 
 # power menu
 bindsym XF86PowerOff exec --no-startup-id rofi -show power-menu -modi "power-menu:rofi-power-menu"

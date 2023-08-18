@@ -12,6 +12,7 @@ i3lock \
 \
 --greeter-color ffffffff \
 --greeter-text="I am locked. Go away." \
+--greeter-pos="ix:iy+350" \
 \
 --insidever-color=000000CC \
 --insidewrong-color=000000CC \
@@ -21,4 +22,6 @@ i3lock \
 --wrong-text="Wrong!" \
 \
 --pass-volume \
---pass-screen
+--pass-screen \
+\
+--composite

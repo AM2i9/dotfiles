@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -e
+
+all=(primary secondary duplicate mirror ex_top ex_left ex_right ex_bottom)
+
+declare -A text
+text["primary"]="Primary Monitor Only"
+text["secondary"]="Secondary Montior Only"
+text["duplicate"]="Duplicate"
+text["mirror"]="Mirror"
+text["ex_top"]="Extend Top"
+text["ex_left"]="Extend Left"
+text["ex_right"]="Extend Right"
+text["ex_bottom"]="Extend Bottom"
+
+declare -A args
+args["primary"]="-o"
+args["secondary"]="-s"
+args["duplicate"]="-d"
+args["mirror"]="-m"
+args["ex_top"]="-e top"
+args["ex_left"]="-e left"
+args["ex_right"]="-e right"
+args["ex_bottom"]="-e bottom"
+
+if [[ "$@" != "" ]]
+then
+    for config in "${all[@]}"
+    do
+        if [[ "$@" == "${text[$config]}" ]]
+        then
+            mons `echo "${args[$config]}"`
+            exit 0
+        fi
+    done
+fi
+
+for config in "${all[@]}"
+do
+    echo "${text[$config]}"
+done

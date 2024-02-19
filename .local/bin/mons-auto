@@ -1,0 +1,17 @@
+#!/usr/env/bin bash
+
+case ${MONS_NUMBER} in
+    1)
+        mons -o
+        nitrogen --restore
+        eww reload
+        ;;
+    2)
+        rofi -show mons -modi mons:mons-rofi
+        nitrogen --restore
+        eww reload
+        ;;
+    *)
+        ;;
+
+esac

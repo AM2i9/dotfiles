@@ -20,7 +20,7 @@
             (for net in NETWORK
                 (box
                     :space-evenly false
-                    :tooltip {net.name + " " + net.state + " - " + (net.connection_name?:"-") + " - " + (net.ip?.[0]?:"No IP")}
+                    :tooltip {net.name + " " + net.state + " - " + (net.connection_name?:"-") + " - " + (((net.ip)?.[0])?:"No IP")}
                     :class "network pill"
                     (label
                         :class "network-icon"

@@ -223,7 +223,7 @@ bindsym XF86MonBrightnessUp exec xbacklight -inc 2
 bindsym XF86MonBrightnessDown exec xbacklight -dec 2
 
 # display scripts
-bindsym $mod+p exec selected=$(ls ~/.screenlayout/|rofi -dmenu) && bash ~/.screenlayout/$selected && nitrogen --restore
+bindsym $mod+p exec rofi -show mons -modi mons:mons-rofi && nitrogen --restore && eww reload
 bindsym $mod+shift+p exec arandr &
 
 # power menu
@@ -232,7 +232,15 @@ bindsym XF86PowerOff exec --no-startup-id rofi -show power-menu -modi "power-men
 gaps inner 8
 focus_follows_mouse no
 
+exec --no-startup-id keepassxc&
+
+for_window [class="KeePassXC"] floating enable
+for_window [class="KeePassXC"] move scratchpad
+
+bindsym $mod+z scratchpad show
+
 exec --no-startup-id nitrogen --restore &
+exec --no-startup-id nohup mons -a -x ~/.local/bin/mons-auto > /dev/null 2>&1 &
 
 # exec --no-startup-id polybar
 exec --no-startup-id eww open bar
